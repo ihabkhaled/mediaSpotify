@@ -28,7 +28,7 @@ export class SpotifyController {
     }
   }
 
-  @Get('search/:name/:offset/:limit')
+  @Get('search/:name/:offset?/:limit?')
   async searchForSong(
     @Param('name') songName: string,
     @Param('offset') offset: number,
