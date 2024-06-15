@@ -1,5 +1,4 @@
 // src/spotify/spotify.service.ts
-import * as fs from 'fs';
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
