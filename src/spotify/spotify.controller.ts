@@ -51,7 +51,7 @@ export class SpotifyController {
     try {
       if (!spotifyUrl) return res.send("Please provide spotifyUrl of the track")
       if (!name) return res.send("Please provide name of the track")
-        
+
       const songObj = {
         spotifyUrl,
         name
@@ -64,7 +64,7 @@ export class SpotifyController {
         'Content-Length': downloadSong.length,
       });
 
-      res.status(HttpStatus.OK).send(downloadSong);
+      return res.status(HttpStatus.OK).send(downloadSong);
     } catch (error) {
       console.error('spotifyController; downloadFromSpotify; ', error)
       return { error: error.message };
