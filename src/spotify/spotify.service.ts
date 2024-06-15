@@ -1,10 +1,11 @@
 // src/spotify/spotify.service.ts
+import * as fs from 'fs';
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import * as dotenv from 'dotenv';
 import * as crypto from 'crypto';
-
+import Spotify from 'spotifydl-core'
 dotenv.config();
 
 @Injectable()
@@ -96,7 +97,22 @@ export class SpotifyService {
         return response.data.access_token;
       return false;
     } catch (error) {
+      console.error('spotifyService; generateGenericAuthWithSpotify; ', error)
       return false;
+    }
+  }
+
+  async processDownloadForItem(item) {
+    const spotify = new Spotify({
+      clientId: this.clientId,
+      clientSecret: this.clientSecret
+    })
+
+    try {
+      const downloadSong = await spotify.downloadTrack(item.spotifyUrl)
+      return downloadSong;
+    } catch (error) {
+      console.error('spotifyService; processDownloadForItem; ', error)
     }
   }
 
@@ -125,13 +141,16 @@ export class SpotifyService {
             delete track.available_markets;
           });
           delete searchResponse.data.tracks.items.available_markets;
-          return searchResponse.data.tracks.items;
+          const items = searchResponse.data.tracks.items;
+          return items;
         } else {
           return 'No data found';
         }
       } else {
         return 'No access token';
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error('spotifyService; searchForSong; ', error)
+     }
   }
 }
